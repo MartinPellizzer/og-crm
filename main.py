@@ -1,4 +1,5 @@
 from tkinter import *
+from  tkinter import ttk
 from PIL import ImageTk, Image
 from tkinter import messagebox
 import sqlite3
@@ -206,9 +207,9 @@ root.geometry("1280x720")
 # search_button.grid(row=i, column=0, columnspan=2)
 # i += 1
 
-frame_left = LabelFrame(root, text='Frame Left', width=120)
+frame_left = LabelFrame(root, text='', width=120)
 frame_left.pack(side=LEFT, fill=Y)
-frame_center = LabelFrame(root, text='Frame Center')
+frame_center = LabelFrame(root, text='')
 frame_center.pack(side=LEFT, fill=BOTH, expand=True)
 
 i = 0
@@ -265,10 +266,10 @@ def add_lead(line):
 			'first_name': '', 
 			'last_name': '', 
 			'business_name': line[0], 
-			'business_address': line[0],
-			'website': '',
-			'phone': '',
-			'email': '',
+			'business_address': line[1],
+			'website': line[2],
+			'phone': line[3],
+			'email': line[4],
 			'status': 'gray'
 		}
 	)
@@ -286,37 +287,119 @@ def get_list_item():
 	with open("salumifici_treviso.csv", "r") as f:
 		reader = csv.reader(f, delimiter="\\")
 		for i, line in enumerate(reader):
-			print(line)
+			# print(line)
 			add_lead(line)
 	# print(listbox.curselection())
 
 	leads = search()
-	for lead in leads:
-		print(lead)
+	# for lead in leads:
+	# 	print(lead)
 
-	listbox.delete(0, END)
-	s = f"{'ID' : <8}{'Date 1' : <16}{'Date 2' : <16}{'First Name' : <16}"
-	print(s)
-	listbox.insert(i, s)
+	# listbox.delete(0, END)
+	# s = f"{'ID' : <8}{'Date 1' : <16}{'Date 2' : <16}{'First Name' : <16}"
+	# print(s)
+	# listbox.insert(i, s)
 	for i, lead in enumerate(leads):
-		s = f"	{lead[0] : <8}\
-				{lead[1] : <16}\
-				{lead[2] : <16}\
-				{lead[3] : <16}\
-				{lead[4] : <16}\
-				{lead[5] : <64}\
-				{lead[6] : <16}\
-				"
-		print(s)
-		listbox.insert(i+1, s)
+		# id_str = str(lead[0])[:16]
+		# id_len = len(str(lead[0]))
+		# for i in range(16 - id_len):
+		# 	id_str += '.'
+		# print(len(id_str))
 
 
-listbox = Listbox(frame_center)
+		# s = f"	{id_str}\
+		# 		{'date_first_added_str'}\
+		# 		{lead[2] : <16}\
+		# 		{lead[3] : <16}\
+		# 		{lead[4] : <16}\
+		# 		{lead[5] : <64}\
+		# 		{lead[6] : <16}\
+		# 		"
+		# # print(s)
+		# listbox.insert(i+1, s)
 
-Font_tuple = (".fonts/FiraMono-Regular.ttf", 12, "bold")
-listbox.configure(font = Font_tuple)
+		treeview.insert(
+			parent = '',
+			index = 'end',
+			iid = i+1,
+			text = '', 
+			values = (
+				str(lead[0]),
+				# lead[1],
+				lead[2],
+				lead[3],
+				lead[4],
+				lead[5],
+				# lead[6],
+				# lead[7],
+				# lead[8],
+				# lead[9],
+				lead[10],
+			)
+		)
 
-listbox.pack(fill=X) 
+
+
+# listbox = Listbox(frame_center)
+
+# Font_tuple = (".fonts/FiraMono-Regular.ttf", 12, "bold")
+# listbox.configure(font = Font_tuple)
+
+# listbox.pack(fill=X) 
+
+treeview = ttk.Treeview(frame_center)
+
+treeview['columns'] = (
+	'id', 
+	# 'date_first_added',
+	'date_last_updated',
+	'first_name', 
+	'last_name', 
+	'business_name', 
+	# 'address', 
+	# 'website',
+	# 'phone',
+	# 'email',
+	'status'
+)
+
+treeview.heading("#0",text="",anchor=CENTER)
+treeview.heading("id",text="Id",anchor=CENTER)
+# treeview.heading("date_first_added",text="Added",anchor=CENTER)
+treeview.heading("date_last_updated",text="Updated",anchor=CENTER)
+treeview.heading("first_name",text="First Name",anchor=CENTER)
+treeview.heading("last_name",text="Last Name",anchor=CENTER)
+treeview.heading("business_name",text="Business",anchor=CENTER)
+# treeview.heading("address",text="Address",anchor=CENTER)
+# treeview.heading("website",text="Website",anchor=CENTER)
+# treeview.heading("phone",text="Phone",anchor=CENTER)
+# treeview.heading("email",text="Email",anchor=CENTER)
+treeview.heading("status",text="Status",anchor=CENTER)
+
+treeview.column("#0", width=0, stretch=NO)
+treeview.column("id",anchor=CENTER, width=80)
+# treeview.column("date_first_added",anchor=CENTER,width=80)
+treeview.column("date_last_updated",anchor=CENTER,width=80)
+treeview.column("first_name",anchor=W,width=80)
+treeview.column("last_name",anchor=W,width=80)
+treeview.column("business_name",anchor=W,width=480)
+# treeview.column("address",anchor=CENTER,width=80)
+# treeview.column("website",anchor=CENTER,width=80)
+# treeview.column("phone",anchor=CENTER,width=80)
+# treeview.column("email",anchor=CENTER,width=80)
+treeview.column("status",anchor=W,width=80)
+
+# get_list_item()
+
+# treeview.insert(parent='',index='end',iid=0,text='', values=('1','Ninja','101','Oklahoma', 'Moore'))
+# treeview.insert(parent='',index='end',iid=1,text='', values=('2','Ranger','102','Wisconsin', 'Green Bay'))
+# treeview.insert(parent='',index='end',iid=2,text='', values=('3','Deamon','103', 'California', 'Placentia'))
+# treeview.insert(parent='',index='end',iid=3,text='', values=('4','Dragon','104','New York' , 'White Plains'))
+# treeview.insert(parent='',index='end',iid=4,text='', values=('5','CrissCross','105','California', 'San Diego'))
+# treeview.insert(parent='',index='end',iid=5,text='', values=('6','ZaqueriBlack','106','Wisconsin' , 'TONY'))
+
+treeview.pack(fill=BOTH, expand=True)
+
 
 # list_button = Button(root, text='Get', width=60, command=lambda: get_list_item())
 # list_button.pack()
